@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="css1.css">
+    <script >
+        let tasks = [];
+let times = [];
+let dates = [];
+
+// On page load, retrieve tasks from localStorage if available
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if tasks data exists in localStorage
+    if (localStorage.getItem('tasks')) {
+        tasks = JSON.parse(localStorage.getItem('tasks'));
+        dates = JSON.parse(localStorage.getItem('dates'));
+        times = JSON.parse(localStorage.getItem('times'));
+        renderTasks(); // Render tasks from localStorage
+    }
+});
+
+function make() {
+    let textV = document.querySelector('.text').value.trim();
+    let dateV = document.querySelector('.date').value;
+    let timeV = document.querySelector('.time').value;
+
+    // Add task to arrays
+    tasks.push(textV);
+    dates.push(dateV);
+    times.push(timeV);
+
+    // Save tasks to localStorage
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    localStorage.setItem('dates', JSON.stringify(dates));
+    localStorage.setItem('times', JSON.stringify(times));
+
+    renderTasks();
+}
+
+function renderTasks() {
+    let tasksHtml = '';
+    for (let i = 0; i < tasks.length; i++) {
+        let task = tasks[i];
+        let time = times[i];
+        let date = dates[i];
+
+        // HTML for displaying task information
+        let taskHtml = `
+            <div class="task-item">
+                <p>${task}</p>
+                <p>${date} ${time}</p>
+                <button onclick="deleteTask(${i})">Delete</button>
+            </div>
+        `;
+        tasksHtml += taskHtml;
+    }
+
+    document.querySelector('.task-list').innerHTML = tasksHtml;
+    // Clear input fields after adding task
+    document.querySelector('.text').value = '';
+    document.querySelector('.date').value = '';
+    document.querySelector('.time').value = '';
+}
+
+function deleteTask(index) {
+    tasks.splice(index, 1);
+    dates.splice(index, 1);
+    times.splice(index, 1);
+
+    // Save updated tasks to localStorage
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    localStorage.setItem('dates', JSON.stringify(dates));
+    localStorage.setItem('times', JSON.stringify(times));
+
+    renderTasks(); // Refresh the task list after deletion
+}
+
+
+    </script>
+  <style>
+    body {
+    font-family: Arial, sans-serif;
+   background: linear-gradient(to right,rgb(84, 148, 84), white);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.main {
+    width: 100%;
+    max-width: 600px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: scroll;
+}
+
+.main h1 {
+    text-align: center;
+    color: rgb(84, 148, 84);
+}
+@media (max-width: 768px) {
+    .maim{
+        width: 300px;
+    }
+
+}
+
+.input-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.input-container input {
+    flex: 1;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.input-container button {
+    padding: 10px 10px;
+    background-color: rgb(84, 148, 84);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.input-container button:hover {
+    background-color: #5c8e5c;
+}
+
+.task-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-item p {
+    margin: 0;
+}
+
+.task-item button {
+    padding: 10px;
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+
+
+.task-item button:hover {
+    background-color: #c0392b;
+}
+.time{
+ background-image: url(time-icon.jpeg);
+ background: center;
+ 
+}
+.text{
+  width: 200px;
+}
+  </style>
+</head>
+<body>
+    <div class="main">
+        <div class="div1">
+            <h1>Make To-Do List</h1>
+        </div>
+        <div class="input-container">
+            <input class="text" type="text" placeholder="Enter task">
+            <input class="date" type="date" >
+            <input class="time" type="time">
+            <button onclick="make()" class="make">Add Task</button>
+        </div>
+        <div class="task-list">
+            <!-- Tasks will be dynamically added here -->
+        </div>
+    </div>
+ 
+
+ 
+       
+</body>
+</html>
